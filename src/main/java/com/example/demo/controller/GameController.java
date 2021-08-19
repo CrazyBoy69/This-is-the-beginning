@@ -12,23 +12,28 @@ import java.util.*;
 public class GameController {
 
     static Map<String,Map<String,Integer>> PlayerInformation = new HashMap<>();
+    static List<Entourage> FirstAttackPlayer,BackAttackPlayer,Container;
+    static int let,t,k;
+    static Map<String,Integer> player1 = new HashMap<>();
+    static Map<String,Integer> player2 = new HashMap<>();
+    static Map<String,Integer> draw = new HashMap<>();
+    static {
+        PlayerInformation.put("player1",player1);
+        PlayerInformation.put("player2",player2);
+        PlayerInformation.put("draw",draw);
+    }
 
     @ResponseBody
     @PostMapping("/entourage")
     public Map<String,Map<String,Integer>> playerEntourage(String entourages,Integer totalTout) {
-        Gson gson = new Gson();
-        Random rand = new Random();
-        int let,t,k;
-        List<Entourage> FirstAttackPlayer,BackAttackPlayer,Container;
-        Map<String,Integer> player1 = new HashMap<>();
-        Map<String,Integer> player2 = new HashMap<>();
-        Map<String,Integer> draw = new HashMap<>();
-        player1.put("VictoryField",0);
+        player1.put("Wins",0);
         player1.put("WinningProbability",0);
-        player2.put("VictoryField",0);
+        player2.put("Wins",0);
         player2.put("WinningProbability",0);
         draw.put("DrawNumber",0);
         draw.put("WinningProbability",0);
+        Gson gson = new Gson();
+        Random rand = new Random();
         for (int w = 0; w < totalTout; w++) {
             PlayerEntourage playerEntourages = gson.fromJson(entourages,PlayerEntourage.class);
             boolean start = rand.nextBoolean();
@@ -61,22 +66,19 @@ public class GameController {
                 BackAttackPlayer = Container;
             }
             if(playerEntourages.getPlayer1Entourage().size() != 0 && playerEntourages.getPlayer2Entourage().size() == 0){
-                player1.put("VictoryField",(player1.get("VictoryField")+1));
+                player1.put("Wins",(player1.get("Wins")+1));
                 System.out.println("player1 Win");
             }else if(playerEntourages.getPlayer1Entourage().size() == 0 && playerEntourages.getPlayer2Entourage().size() != 0){
-                player2.put("VictoryField",(player2.get("VictoryField")+1));
+                player2.put("Wins",(player2.get("Wins")+1));
                 System.out.println("player1 Win");
             }else{
                 draw.put("DrawNumber",(draw.get("DrawNumber")+1));
                 System.out.println("DRAW");
             }
         }
-        player1.put("WinningProbability",(int)((double)player1.get("VictoryField")/totalTout*100));
-        player2.put("WinningProbability",(int)((double)player2.get("VictoryField")/totalTout*100));
+        player1.put("WinningProbability",(int)((double)player1.get("Wins")/totalTout*100));
+        player2.put("WinningProbability",(int)((double)player2.get("Wins")/totalTout*100));
         draw.put("WinningProbability",(int)((double)draw.get("DrawNumber")/totalTout*100));
-        PlayerInformation.put("player1",player1);
-        PlayerInformation.put("player2",player2);
-        PlayerInformation.put("draw",draw);
         return PlayerInformation;
     }
 

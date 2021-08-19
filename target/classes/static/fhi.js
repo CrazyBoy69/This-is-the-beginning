@@ -138,9 +138,9 @@ let app = new Vue({
                     }
                     app.player1 = data["player1"]
                     app.player2 = data["player2"]
-                    app.player1Win = app.player1["VictoryField"]
+                    app.player1Win = app.player1["Wins"]
                     app.player1WinP = app.player1["WinningProbability"]
-                    app.player2Win = app.player2["VictoryField"]
+                    app.player2Win = app.player2["Wins"]
                     app.player2WinP = app.player2["WinningProbability"]
                 },
                 error:function (){
